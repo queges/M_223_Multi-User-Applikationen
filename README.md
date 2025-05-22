@@ -53,3 +53,33 @@ Spieler melden sich zu Trainings an oder ab, Trainer behalten den Überblick.
 | 8 | Dokumentation + Deployment            | 3           | ⏳ geplant   |
 
 ---
+
+## 🧩 Klassendiagramm (UML)
+
+```mermaid
+classDiagram
+    class User {
+        +id: UUID
+        +name: String
+        +email: String
+        +password: String
+        +role: String  // "spieler" oder "trainer"
+    }
+
+    class Training {
+        +id: UUID
+        +datum: Date
+        +zeit: Time
+        +created_by: UUID
+    }
+
+    class Teilnahme {
+        +id: UUID
+        +user_id: UUID
+        +training_id: UUID
+        +status: String // "kommt", "kommt_nicht", "offen"
+    }
+
+    User "1" -- "0..*" Teilnahme : nimmt teil
+    Training "1" -- "0..*" Teilnahme : hat Teilnahme
+    User "1" -- "0..*" Training : erstellt
