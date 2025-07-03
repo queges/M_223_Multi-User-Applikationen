@@ -55,18 +55,22 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
  
-private static final String[] EVERYONE = {"/public", "/api/auth/**"};
- @Bean
- public SecurityFilterChain filterChain(HttpSecurity http)
-throws Exception {
- http.csrf(csrf -> csrf.disable()) //disable Cross-Site Request Forgery (CSRF) prevention
-.cors(Customizer.withDefaults()) //configure CORS: Cross Origin Request Sharing
-.authorizeHttpRequests(auth -> {
-auth.requestMatchers(HttpMethod.POST, "/items").hasRole("ADMIN");
-auth.requestMatchers(EVERYONE).permitAll()
-.anyRequest().authenticated(); } )
- .formLogin(Customizer.withDefaults()) //für Login-Form im Browser
- .httpBasic(Customizer.withDefaults()); // für CURL, Postman, Insomnia
- return http.build();
- }
+private static final String[] EVERYONE = {"/public", "/api/auth/**", "/api/trainings"};
+
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(Customizer.withDefaults())
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/trainings/**").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()     
+            .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN") 
+            .anyRequest().authenticated()
+        )
+        .formLogin(Customizer.withDefaults())    // Web-Formular-Login
+        .httpBasic(Customizer.withDefaults());   // Für Tools wie Postman, curl, Insomnia
+
+    return http.build();
+}
 }

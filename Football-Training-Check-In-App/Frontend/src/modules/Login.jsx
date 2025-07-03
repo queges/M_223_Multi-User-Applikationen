@@ -1,37 +1,44 @@
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import React, { useState } from "react";
+
 export default function Login() {
-  const redirect = useNavigate();
+  const navigate = useNavigate();
   const [entries, setEntries] = useState({ username: "", password: "" });
+
   function store(e) {
     setEntries({ ...entries, [e.target.name]: e.target.value });
   }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      AuthService.login(entries.username, entries.password)
-        .then((res) => {
-          if (res.username) {
-            redirect(0);
-            // that actually does the redirect correctly
-          }
-        })
-        .catch((err) => {
-          if (err.status === 401) {
-            alert("Wrong username or password");
-          }
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    AuthService.login(entries.username, entries.password)
+      .then((res) => {
+        if (res && res.token) {
+          // ✅ User speichern
+          localStorage.setItem("user", JSON.stringify(res));
+          // ✅ Weiterleitung zum Dashboard
+          navigate("/dashboard");
+        } else {
+          alert("Login fehlgeschlagen");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.status === 401) {
+          alert("Falscher Benutzername oder Passwort");
+        } else {
+          alert("Login fehlgeschlagen");
+        }
+      });
   };
+
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit}>
         <h2>Login</h2>
         <div className="form-group">
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">Benutzername:</label>
           <input
             type="text"
             id="username"
@@ -42,7 +49,7 @@ export default function Login() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Passwort:</label>
           <input
             type="password"
             id="password"
