@@ -4,8 +4,9 @@ import About from './modules/About'
 import Public from './modules/Public'
 import NoPage from './modules/NoPage'
 import Login from './modules/Login'
-import { Routes } from 'react-router-dom'
-import { Route } from 'react-router-dom'
+import Logout from './modules/LogOut'
+import Dashboard from './modules/Dashboard'
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
 
 function App() {
@@ -16,11 +17,12 @@ function App() {
         <Route path="public" element={<Public />} />
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
+        <Route path="logout" element={<Logout />} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="*" element={<NoPage />} />
       </Route>
     </Routes>
   )
-
 }
 
 export default App

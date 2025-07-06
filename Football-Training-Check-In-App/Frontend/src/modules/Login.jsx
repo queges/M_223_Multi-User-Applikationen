@@ -14,10 +14,8 @@ export default function Login() {
     event.preventDefault();
     AuthService.login(entries.username, entries.password)
       .then((res) => {
-        if (res && res.token) {
-          // ✅ User speichern
+        if (res && res.username) {
           localStorage.setItem("user", JSON.stringify(res));
-          // ✅ Weiterleitung zum Dashboard
           navigate("/dashboard");
         } else {
           alert("Login fehlgeschlagen");
@@ -60,6 +58,7 @@ export default function Login() {
           />
         </div>
         <button type="submit">Login</button>
+        <button type="button" onClick={() => navigate("/dashboard")}>Zum Dashboard wechseln</button>
       </form>
     </div>
   );
