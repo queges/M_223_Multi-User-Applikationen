@@ -56,7 +56,7 @@ Spieler melden sich zu Trainings an oder ab, Trainer behalten den Überblick.
 | 5 | An-/Abmeldung implementieren               | 4           | ✅ erledigt |
 | 6 | Trainer-Sicht entwickeln                   | 4           | ✅ erledigt |
 | 7 | Tests (Frontend + Backend) schreiben       | 3           | ✅ erledigt |
-| 8 | Dokumentation + Deployment                 | 3           | ⏳ geplant  |
+| 8 | Dokumentation + Deployment                 | 3           | ✅ erledigt |
 
 ---
 
@@ -133,34 +133,28 @@ Die Tests sind automatisiert über `npm test` (Frontend) und `mvn test` (Backend
 | 1     | Projektsetup  | 2 h   | Lokale Docker-DB + Spring init  |
 | 2     | JWT Backend   | 3 h   | JWT + Login-Controller + Tests  |
 | 3     | Frontend Auth | 2 h   | Login-Maske + Storage + Routing |
-| ...   | ...           | ...   | ...                             |
 
 ---
 
 ## ✅ Soll-Ist Vergleich & Auswertung
 
-| Bereich           | Soll                  | Ist                            | Abweichung |
-| ----------------- | --------------------- | ------------------------------ | ---------- |
-| Authentifizierung | JWT & Rollen          | Funktioniert wie geplant       | -          |
-| An-/Abmeldung     | Spielerfunktion       | Funktioniert, UI getestet      | -          |
-| Trainer-Tools     | Übersicht & Erstellen | Voll funktionsfähig            | -          |
-| Tests             | 4 automatisierte      | Sind vorhanden & protokolliert | -          |
+| Bereich           | Soll                  | Ist                              | Abweichung |
+| ----------------- | --------------------- | -------------------------------- | ---------- |
+| Authentifizierung | JWT & Rollen          | keine tokens nötig               | -          |
+| An-/Abmeldung     | Spielerfunktion       | Funktioniert, UI getestet        | -          |
+| Trainer-Tools     | Übersicht & Erstellen | Voll funktionsfähig              | -          |
+| Tests             | 4 automatisierte      | nicht automatisiert nur insomnia | -          |
 
 ---
 
 ## 🌐 Deployment & Ausführung
 
-### Voraussetzungen
-
-* Docker & Docker-Compose
-* Java 17
-* Node.js
-
 ### Backend starten
 
 ```bash
 docker-compose up -d
-./mvnw spring-boot:run
+cd backend
+mvn spring-boot:run
 ```
 
 ### Frontend starten
