@@ -9,12 +9,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || !user.token) {
+    if (!user) {
       navigate("/login");
       return;
     }
 
-    // Annahme: Rolle kommt als Array, z. B. ["user"] oder ["admin"]
     const isAdmin = user.roles.includes("admin");
     const isUser = user.roles.includes("user");
 

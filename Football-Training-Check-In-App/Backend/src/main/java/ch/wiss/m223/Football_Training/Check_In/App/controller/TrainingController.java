@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import ch.wiss.m223.Football_Training.Check_In.App.dto.AttendanceDTO;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -64,15 +66,20 @@ public class TrainingController {
 
     // Trainer: Teilnehmerübersicht anzeigen
     @GetMapping("/{id}/attendance")
-    public ResponseEntity<?> getAttendanceList(@PathVariable Long id) {
+        public ResponseEntity<?> getAttendanceList(@PathVariable Long id) {
         Optional<Training> trainingOpt = trainingRepo.findById(id);
         if (trainingOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Training nicht gefunden");
         }
-
+    
         Training training = trainingOpt.get();
         List<Attendance> attendances = attendanceRepo.findByTraining(training);
+    
+        List<AttendanceDTO> response = attendances.stream()
+            .map(a -> new AttendanceDTO(a.getUser().getUsername(), a.getStatus()))
+            .toList();
 
-        return ResponseEntity.ok(attendances);
-    }
+    return ResponseEntity.ok(response);
+}
+
 }

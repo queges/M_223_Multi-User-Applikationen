@@ -1,32 +1,35 @@
-import AuthService from "../services/auth.service"
-import "../styles/Navigation.css"
+import AuthService from "../services/auth.service";
+import { Link } from "react-router-dom";      // <-- Import Link
+import "../styles/Navigation.css";
 
 export default function Navigation() {
   return (
     <nav>
       <ul>
         <li>
-          <a href="/">Home</a>
+          <Link to="/">Home</Link>            {/* <-- Link statt a */}
         </li>
         <li>
-          <a href="/about">About</a>
+          <Link to="/about">About</Link>     {/* <-- Link statt a */}
         </li>
-        <li><a href="/public">Public</a></li>
-          {AuthService.getCurrentUser() ? (
-            <>
-            <li>
-            <a href="/private">Private</a>
-            </li>
-            <li>
-            <a href="/logout">Logout</a>
-            </li>
-            </>
-      ) : (
         <li>
-          <a href="/login">Login</a>
+          <Link to="/public">Public</Link>    {/* <-- Link statt a */}
         </li>
-      )}
+        {AuthService.getCurrentUser() ? (
+          <>
+            <li>
+              <Link to="/dashboard">Dashboard</Link> {/* <-- Link statt a */}
+            </li>
+            <li>
+              <Link to="/logout">Logout</Link>   {/* <-- Link statt a */}
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/login">Login</Link>        {/* <-- Link statt a */}
+          </li>
+        )}
       </ul>
     </nav>
-  )
+  );
 }

@@ -3,8 +3,9 @@ const API_URL = "http://localhost:8080/";
 
 
 const login = (username, password) => {
+  console.log(username, password);
   return axios
-    .post(API_URL + "login", { username, password })
+    .post(API_URL + "api/auth/login", { username, password })
     .then((response) => {
       if (response.data.username) {
         localStorage.setItem("user", JSON.stringify(response.data));
