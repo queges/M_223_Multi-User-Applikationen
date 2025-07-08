@@ -14,8 +14,9 @@ export default function Dashboard() {
       return;
     }
 
-    const isAdmin = user.roles.includes("admin");
-    const isUser = user.roles.includes("user");
+    const isAdmin = user.roles.includes("ROLE_ADMIN");
+    const isUser = user.roles.includes("ROLE_USER");
+
 
     if (isAdmin) setRole("admin");
     else if (isUser) setRole("user");

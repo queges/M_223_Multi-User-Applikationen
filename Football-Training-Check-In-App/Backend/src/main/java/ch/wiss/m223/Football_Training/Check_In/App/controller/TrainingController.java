@@ -1,17 +1,19 @@
 package ch.wiss.m223.Football_Training.Check_In.App.controller;
 
+import ch.wiss.m223.Football_Training.Check_In.App.dto.AttendanceDto;
+import ch.wiss.m223.Football_Training.Check_In.App.dto.TrainingDto;
 import ch.wiss.m223.Football_Training.Check_In.App.model.*;
 import ch.wiss.m223.Football_Training.Check_In.App.repository.*;
 import ch.wiss.m223.Football_Training.Check_In.App.security.services.UserDetailsImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import ch.wiss.m223.Football_Training.Check_In.App.dto.AttendanceDTO;
-
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/trainings")
@@ -26,13 +28,15 @@ public class TrainingController {
     @Autowired
     private UserRepository userRepo;
 
-    // Spieler: Kommende Trainings abrufen
+    // GET all Trainings (für CoachDashboard + PlayerDashboard)
     @GetMapping
-    public List<Training> getUpcomingTrainings() {
-        return trainingRepo.findAll();
+    public List<TrainingDto> getAllTrainings() {
+        return trainingRepo.findAll().stream()
+            .map(TrainingDto::new)
+            .collect(Collectors.toList());
     }
 
-    // Trainer: Neues Training erstellen
+    // POST neues Training
     @PostMapping
     public ResponseEntity<?> createTraining(@RequestBody Map<String, String> body) {
         LocalDateTime startTime = LocalDateTime.parse(body.get("startTime"));
@@ -41,7 +45,7 @@ public class TrainingController {
         return ResponseEntity.ok("Training erstellt");
     }
 
-    // Spieler: Teilnahme setzen
+    // POST Teilnahme setzen
     @PostMapping("/{id}/attendance")
     public ResponseEntity<?> setAttendance(
         @PathVariable Long id,
@@ -52,6 +56,7 @@ public class TrainingController {
         if (trainingOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Training nicht gefunden");
         }
+
         Training training = trainingOpt.get();
         User user = userRepo.findById(userDetails.getId()).orElseThrow();
 
@@ -64,22 +69,21 @@ public class TrainingController {
         return ResponseEntity.ok("Teilnahme gespeichert");
     }
 
-    // Trainer: Teilnehmerübersicht anzeigen
+    // GET Teilnehmerübersicht für ein Training (optional)
     @GetMapping("/{id}/attendance")
-        public ResponseEntity<?> getAttendanceList(@PathVariable Long id) {
+    public ResponseEntity<?> getAttendanceList(@PathVariable Long id) {
         Optional<Training> trainingOpt = trainingRepo.findById(id);
         if (trainingOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Training nicht gefunden");
         }
-    
+
         Training training = trainingOpt.get();
         List<Attendance> attendances = attendanceRepo.findByTraining(training);
-    
-        List<AttendanceDTO> response = attendances.stream()
-            .map(a -> new AttendanceDTO(a.getUser().getUsername(), a.getStatus()))
-            .toList();
 
-    return ResponseEntity.ok(response);
-}
+        List<AttendanceDto> response = attendances.stream()
+            .map(AttendanceDto::new)
+            .collect(Collectors.toList());
 
+        return ResponseEntity.ok(response);
+    }
 }
