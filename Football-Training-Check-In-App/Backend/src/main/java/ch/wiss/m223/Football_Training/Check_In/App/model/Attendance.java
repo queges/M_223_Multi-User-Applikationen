@@ -1,6 +1,7 @@
 package ch.wiss.m223.Football_Training.Check_In.App.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Attendance {

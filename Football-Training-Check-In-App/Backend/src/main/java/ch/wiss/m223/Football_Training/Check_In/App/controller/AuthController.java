@@ -96,6 +96,8 @@ public class AuthController {
                     case "admin":
                         roles.add(roleRepository.findByName(ERole.ROLE_ADMIN).get());
                         break;
+                    case "user":
+                        roles.add(roleRepository.findByName(ERole.ROLE_USER).get());
                 }
             });
         }

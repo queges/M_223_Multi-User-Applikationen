@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../styles/PlayerDashboard.css";
 
 export default function PlayerDashboard() {
   const [trainings, setTrainings] = useState([]);
@@ -20,33 +21,52 @@ export default function PlayerDashboard() {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${user.token}`,
+
       },
       body: JSON.stringify({ status }),
     }).then(() => alert("Antwort gespeichert."));
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Kommende Trainings</h2>
-      <ul>
-        {trainings.map((t) => (
-          <li key={t.id} className="mb-2 border p-2 rounded">
-            <p>{new Date(t.startTime).toLocaleString()}</p>
-            <button
-              className="bg-green-500 text-white px-2 py-1 mr-2 rounded"
-              onClick={() => respond(t.id, "YES")}
-            >
-              Ich komme
-            </button>
-            <button
-              className="bg-red-500 text-white px-2 py-1 rounded"
-              onClick={() => respond(t.id, "NO")}
-            >
-              Ich komme nicht
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="player-dashboard">
+      <h2>Welcome {user.username}</h2>
+      <div className="dashboard-grid">
+        {/* Events */}
+        <div>
+          <h3 className="section-title">Events</h3>
+          {trainings.map((t) => (
+            <div key={t.id} className="event-box">
+              {new Date(t.startTime).toLocaleString()}
+            </div>
+          ))}
+        </div>
+
+        {/* Attendance */}
+        <div>
+          <h3 className="section-title">Next Events attendance</h3>
+          {trainings.map((t) => (
+            <div key={t.id} className="attendance-group">
+              <div className="attendance-time">
+                {new Date(t.startTime).toLocaleString()}
+              </div>
+              <div className="attendance-buttons">
+                <button
+                  className="no"
+                  onClick={() => respond(t.id, "NO")}
+                >
+                  ❌
+                </button>
+                <button
+                  className="yes"
+                  onClick={() => respond(t.id, "YES")}
+                >
+                  ✅
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

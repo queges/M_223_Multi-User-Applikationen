@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+import "../styles/CoachDashboard.css";
 
 export default function CoachDashboard() {
   const [trainings, setTrainings] = useState([]);
   const [startTime, setStartTime] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
+  const nextTraining = trainings
+  .filter(t => new Date(t.startTime) > new Date()) // nur zukünftige
+  .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))[0]; // das nächste
+
 
   const fetchTrainings = () => {
     fetch("http://localhost:8080/api/trainings", {
@@ -35,40 +40,74 @@ export default function CoachDashboard() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Trainerübersicht</h2>
+    <div className="coach-dashboard">
+      <h2>Welcome Coach {user.username}</h2>
+      <div className="dashboard-grid">
+        {/* Events */}
+        <div>
+          <h3 className="section-title">Events</h3>
+          {trainings.map((t) => (
+            <div key={t.id} className="training-box">
+              <div className="event">
+                {new Date(t.startTime).toLocaleString()}
+              </div>
+              <button className="delete-button">X</button>
+            </div>
+          ))}
+        </div>
 
-      <div className="mb-4">
-        <input
-          type="datetime-local"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
-          className="border p-1 mr-2"
-        />
-        <button
-          onClick={createTraining}
-          className="bg-blue-500 text-white px-3 py-1 rounded"
-        >
-          Training erstellen
-        </button>
+        {/* Attendance */}
+<div>
+  <h3 className="section-title">Next Events attendance</h3>
+  {nextTraining ? (
+    <div>
+      <p className="event">
+        {new Date(nextTraining.startTime).toLocaleString()}
+      </p>
+
+      {Array.isArray(nextTraining.attendances) &&
+      nextTraining.attendances.length > 0 ? (
+        nextTraining.attendances.map((a, i) => (
+          <div key={i} className="attendance-entry">
+            <div className="attendance-name">
+              {a.user?.username || "Unbekannt"}
+            </div>
+            <div
+              className={`attendance-status ${
+                a.status === "YES"
+                  ? "yes"
+                  : a.status === "NO"
+                  ? "no"
+                  : "unknown"
+              }`}
+            ></div>
+          </div>
+        ))
+      ) : (
+        <p>Keine Spielerantworten vorhanden</p>
+      )}
+    </div>
+  ) : (
+    <p>Kein zukünftiges Training gefunden</p>
+  )}
+</div>
+
+        
+
+        {/* Add Events */}
+        <div>
+          <h3 className="section-title">Add Events</h3>
+          <div className="add-event-form">
+            <label>Date:</label>
+            <input
+              type="datetime-local"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+            <button onClick={createTraining}>Add</button>
+          </div>
+        </div>
       </div>
-
-      <ul>
-        {trainings.map((t) => (
-          <li key={t.id} className="mb-2 border p-2 rounded">
-            <p className="font-semibold">
-              {new Date(t.startTime).toLocaleString()}
-            </p>
-            <ul className="ml-4 mt-2">
-              {t.attendances?.map((a, i) => (
-                <li key={i}>
-                  {a.user?.username || "Unbekannt"}: {a.status || "Keine Antwort"}
-                </li>
-              )) || <li>Keine Rückmeldungen</li>}
-            </ul>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
