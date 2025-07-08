@@ -92,12 +92,12 @@ Die Kommunikation mit dem Backend erfolgt über `fetch` oder `axios` mit dem JWT
 
 ## 🔬 Tests
 
-### ✅ Backend Tests (JUnit & MockMvc)
+### ✅ Backend Tests (JUnit)
 
 * TrainingControllerTest.java: Testet Anlegen von Trainings (Admin-Rolle)
 * TeilnahmeControllerTest.java: Testet Spieleran-/abmeldung mit JWT
 
-### ✅ Frontend Tests (Jest & React Testing Library)
+### ✅ Frontend Tests (Jest)
 
 * Login.test.jsx: Login mit korrekten und falschen Zugangsdaten
 * TrainingList.test.jsx: Anzeige von Trainingsdaten simulieren
@@ -136,14 +136,14 @@ Die Tests sind automatisiert über `npm test` (Frontend) und `mvn test` (Backend
 
 ---
 
-## ✅ Soll-Ist Vergleich & Auswertung
+## ✅ Soll-Ist Vergleich
 
-| Bereich           | Soll                  | Ist                              | Abweichung |
-| ----------------- | --------------------- | -------------------------------- | ---------- |
-| Authentifizierung | JWT & Rollen          | keine tokens nötig               | -          |
-| An-/Abmeldung     | Spielerfunktion       | Funktioniert, UI getestet        | -          |
-| Trainer-Tools     | Übersicht & Erstellen | Voll funktionsfähig              | -          |
-| Tests             | 4 automatisierte      | nicht automatisiert nur insomnia | -          |
+| Bereich           | Soll                  | Ist                              | 
+| ----------------- | --------------------- | -------------------------------- | 
+| Authentifizierung | JWT & Rollen          | keine tokens nötig               | 
+| An-/Abmeldung     | Spielerfunktion       | Funktioniert, UI getestet        | 
+| Trainer-Tools     | Übersicht & Erstellen | Voll funktionsfähig              | 
+| Tests             | 4 automatisierte      | nicht automatisiert nur insomnia | 
 
 ---
 
